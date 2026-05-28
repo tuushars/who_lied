@@ -78,13 +78,6 @@ class VotingScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 12),
-            if (game.players.any((p) => p.isBot))
-              OutlinedButton.icon(
-                onPressed: controller.botCastOneVote,
-                icon: const Icon(Icons.auto_awesome_outlined),
-                label: const Text('Simulate Bot Vote'),
-              ),
-            const SizedBox(height: 12),
             ChunkyButton(
               onPressed: game.votesByVoterId.isEmpty
                   ? null

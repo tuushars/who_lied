@@ -98,7 +98,7 @@ class RevealScreen extends ConsumerWidget {
                   shadow: const Color(0xFF66002C),
                 ),
                 const SizedBox(height: 8),
-                if (!game.isHost)
+                if (game.hostId != myId)
                   const Text(
                     'Tip: Everyone follows the same phase timers (local scaffold).',
                     textAlign: TextAlign.center,

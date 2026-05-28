@@ -72,9 +72,7 @@ class ScoreboardScreen extends ConsumerWidget {
                         ),
                       ),
                       subtitle: Text(
-                        p.id == imposterId
-                            ? 'Imposter'
-                            : (p.isBot ? 'Bot' : 'Player'),
+                        p.id == imposterId ? 'Imposter' : 'Player',
                       ),
                     );
                   },

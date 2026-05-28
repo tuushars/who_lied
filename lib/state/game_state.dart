@@ -11,12 +11,10 @@ enum GamePhase {
 class WhoLiedPlayer {
   final String id;
   final String name;
-  final bool isBot;
 
   const WhoLiedPlayer({
     required this.id,
     required this.name,
-    required this.isBot,
   });
 }
 
@@ -24,9 +22,10 @@ class WhoLiedGameState {
   final GamePhase phase;
 
   final String? roomCode;
-  final bool isHost;
+  final String hostId;
   final String? myPlayerId;
   final List<WhoLiedPlayer> players;
+  final String selectedCategory;
 
   // Round data
   final String? topic;
@@ -47,9 +46,10 @@ class WhoLiedGameState {
   const WhoLiedGameState({
     required this.phase,
     required this.roomCode,
-    required this.isHost,
+    required this.hostId,
     required this.myPlayerId,
     required this.players,
+    this.selectedCategory = 'General',
     required this.topic,
     required this.imposterPlayerId,
     required this.cluesByPlayerId,
@@ -66,9 +66,10 @@ class WhoLiedGameState {
     return WhoLiedGameState(
       phase: GamePhase.home,
       roomCode: null,
-      isHost: false,
+      hostId: "",
       myPlayerId: null,
       players: const [],
+      selectedCategory: 'General',
       topic: null,
       imposterPlayerId: null,
       cluesByPlayerId: const {},
@@ -85,9 +86,10 @@ class WhoLiedGameState {
   WhoLiedGameState copyWith({
     GamePhase? phase,
     String? roomCode,
-    bool? isHost,
+    String? hostId,
     String? myPlayerId,
     List<WhoLiedPlayer>? players,
+    String? selectedCategory,
     String? topic,
     String? imposterPlayerId,
     Map<String, String>? cluesByPlayerId,
@@ -102,9 +104,10 @@ class WhoLiedGameState {
     return WhoLiedGameState(
       phase: phase ?? this.phase,
       roomCode: roomCode ?? this.roomCode,
-      isHost: isHost ?? this.isHost,
+      hostId: hostId ?? this.hostId,
       myPlayerId: myPlayerId ?? this.myPlayerId,
       players: players ?? this.players,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
       topic: topic ?? this.topic,
       imposterPlayerId: imposterPlayerId ?? this.imposterPlayerId,
       cluesByPlayerId: cluesByPlayerId ?? this.cluesByPlayerId,

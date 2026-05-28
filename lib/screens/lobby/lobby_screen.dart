@@ -83,6 +83,7 @@ class LobbyScreen extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final p = game.players[index];
                   final isMe = p.id == myId;
+                  print("Is Me: ${p.id}, $myId");
                   return Container(
                     decoration: BoxDecoration(
                       color: StitchColors.surfaceContainerHigh,
@@ -97,10 +98,10 @@ class LobbyScreen extends ConsumerWidget {
                         ),
                       ),
                       title: Text(p.name),
-                      subtitle: Text(
-                        [if (p.isBot) 'Bot', if (isMe) 'You'].join(' · '),
-                      ),
-                      trailing: isMe && game.isHost
+                      subtitle: isMe ? Text(
+                        'You',
+                      ) : null,
+                      trailing: game.hostId == p.id
                           ? const Icon(
                               Icons.verified,
                               color: StitchColors.tertiary,
@@ -112,30 +113,14 @@ class LobbyScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 12),
-            if (!game.isHost)
+            if (game.hostId != myId)
               const Text(
                 'Waiting for the host to start…',
                 textAlign: TextAlign.center,
               ),
-            Row(
-              children: [
-                Expanded(
-                  child: ChunkyButton(
-                    onPressed: game.players.length >= 8
-                        ? null
-                        : controller.addBotPlayer,
-                    label: 'ADD BOT PLAYER',
-                    icon: Icons.add,
-                    background: StitchColors.surfaceContainer,
-                    foreground: StitchColors.onSurface,
-                    shadow: Colors.black,
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(height: 12),
             ChunkyButton(
-              onPressed: (!game.isHost || game.players.length < 2)
+              onPressed: (game.hostId != myId || game.players.length < 2)
                   ? null
                   : () {
                       controller.startRound();

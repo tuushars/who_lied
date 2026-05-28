@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'game_state.dart';
+import 'topics.dart';
 
 class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
   WhoLiedGameController() : super(WhoLiedGameState.initial());
@@ -19,22 +23,12 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     super.dispose();
   }
 
-  String _newId() => _rand.nextInt(1 << 32).toString();
+  String _newId() => FirebaseAuth.instance.currentUser?.uid ?? "unauthenticated";
 
   String createRandomRoomCode() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // avoid confusing chars
     return List.generate(6, (_) => chars[_rand.nextInt(chars.length)]).join();
   }
-
-  static const _topics = <String>[
-    'Cats',
-    'Space',
-    'Pizza toppings',
-    'Movie genres',
-    'Programming languages',
-    'Famous landmarks',
-    'Superpowers',
-  ];
 
   void resetToHome() {
     _clueTimer?.cancel();
@@ -44,39 +38,74 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     state = WhoLiedGameState.initial();
   }
 
-  void createRoom({required String myName}) {
-    _clueTimer?.cancel();
-    _discussionTimer?.cancel();
-    _clueTimer = null;
-    _discussionTimer = null;
+  Future<void> createRoom({required String myName}) async{
+    print("Hello from createRoom");
+    try {
+      print("Hello from createRoom 2");
+      _clueTimer?.cancel();
+      print("Hello from createRoom 3");
+      _discussionTimer?.cancel();
+      _clueTimer = null;
+      _discussionTimer = null;
 
-    final meId = _newId();
-    final code = createRandomRoomCode();
-    state = state.copyWith(
-      phase: GamePhase.lobby,
-      roomCode: code,
-      isHost: true,
-      myPlayerId: meId,
-      players: [
-        WhoLiedPlayer(id: meId, name: myName.trim().isEmpty ? 'Host' : myName, isBot: false),
-      ],
-      topic: null,
-      imposterPlayerId: null,
-      cluesByPlayerId: const {},
-      votesByVoterId: const {},
-      clueSecondsRemaining: 0,
-      cluePhaseLocked: false,
-      discussionSecondsRemaining: 0,
-      discussionPhaseLocked: false,
-      majorityVotedPlayerId: null,
-      scoresByPlayerId: const {},
-    );
+      final meId = _newId();
+      final code = createRandomRoomCode();
+      print("Hello from createRoom 4");
+      state = state.copyWith(
+        phase: GamePhase.lobby,
+        roomCode: code,
+        hostId: meId,
+        myPlayerId: meId,
+        players: [
+          WhoLiedPlayer(id: meId, name: myName.trim().isEmpty ? 'Host' : myName),
+        ],
+        topic: null,
+        imposterPlayerId: null,
+        cluesByPlayerId: const {},
+        votesByVoterId: const {},
+        clueSecondsRemaining: 0,
+        cluePhaseLocked: false,
+        discussionSecondsRemaining: 0,
+        discussionPhaseLocked: false,
+        majorityVotedPlayerId: null,
+        scoresByPlayerId: const {},
+      );
+      print("Hello from createRoom 5");
+
+      final db = FirebaseDatabase.instance;
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        await FirebaseAuth.instance.signInAnonymously();
+      }
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      print("Hello from createRoom 6");
+      await db.ref('rooms/$code').set({
+        'hostId': uid,
+        'status': 'lobby',
+        'round': 1,
+      }).timeout(const Duration(seconds: 10), onTimeout: () {
+        print("TIMEOUT - check databaseURL");
+      }).catchError((e) {
+        print("FIREBASE ERROR: $e");
+      });
+      print("Hello from createRoom 7");
+      await db.ref('rooms/$code/players/$uid').set({
+        'name': myName.trim().isEmpty ? 'Host' : myName,
+        'score': 0,
+      });
+      print("Hello from createRoom 9");
+
+      listenToRoom(code);
+      print("Hello from createRoom 10");
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   void joinRoom({
     required String roomCode,
     required String myName,
-  }) {
+  }) async {  // add async here
     _clueTimer?.cancel();
     _discussionTimer?.cancel();
     _clueTimer = null;
@@ -86,13 +115,12 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     state = state.copyWith(
       phase: GamePhase.lobby,
       roomCode: roomCode.trim().toUpperCase(),
-      isHost: false,
+      hostId: "",
       myPlayerId: meId,
       players: [
         WhoLiedPlayer(
           id: meId,
           name: myName.trim().isEmpty ? 'Player' : myName,
-          isBot: false,
         ),
       ],
       topic: null,
@@ -106,27 +134,28 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       majorityVotedPlayerId: null,
       scoresByPlayerId: const {},
     );
+
+    // ADD THIS BELOW 👇
+    final code = roomCode.trim().toUpperCase();
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final db = FirebaseDatabase.instance;
+
+    await db.ref('rooms/$code/players/$uid').set({
+      'name': myName.trim().isEmpty ? 'Player' : myName,
+      'score': 0,
+    });
+
+    await db.ref('rooms/$code/players/$uid').onDisconnect().remove();
+    listenToRoom(code);
   }
 
-  void addBotPlayer() {
-    if (state.players.length >= 8) return;
-    final meId = state.myPlayerId;
-    if (meId == null) return;
-
-    final botNumber = state.players.where((p) => p.isBot).length + 1;
-    final id = _newId();
-    final name = 'Bot $botNumber';
-
-    state = state.copyWith(
-      players: [
-        ...state.players,
-        WhoLiedPlayer(id: id, name: name, isBot: true),
-      ],
-    );
+  void setCategory(String category) {
+    if (state.hostId != state.myPlayerId) return;
+    state = state.copyWith(selectedCategory: category);
   }
 
   void startRound() {
-    if (!state.isHost) return;
+    if (state.hostId != state.myPlayerId) return;
     if (state.players.length < 2) return;
 
     _clueTimer?.cancel();
@@ -135,7 +164,8 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     _discussionTimer = null;
 
     final imposter = state.players[_rand.nextInt(state.players.length)];
-    final topic = _topics[_rand.nextInt(_topics.length)];
+    final categoryTopics = topicPacks[state.selectedCategory] ?? topicPacks['General']!;
+    final topic = categoryTopics[_rand.nextInt(categoryTopics.length)];
 
     state = state.copyWith(
       phase: GamePhase.reveal,
@@ -197,28 +227,19 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     );
   }
 
-  void botSubmitOneClue() {
-    if (state.phase != GamePhase.clues) return;
-    if (state.cluePhaseLocked) return;
-
-    final topic = state.topic;
-    if (topic == null) return;
-
-    final imposterId = state.imposterPlayerId;
-    if (imposterId == null) return;
-
-    final missing = state.players.where((p) => !state.cluesByPlayerId.containsKey(p.id)).toList();
-    if (missing.isEmpty) return;
-
-    final target = missing[_rand.nextInt(missing.length)];
-
-    final clue = target.id == imposterId ? '??? (off-topic)'.replaceAll('???', topic) : 'Connects to $topic';
-    state = state.copyWith(
-      cluesByPlayerId: {
-        ...state.cluesByPlayerId,
-        target.id: clue,
-      },
-    );
+  void listenToRoom(String code) {
+    FirebaseDatabase.instance.ref('rooms/$code').onValue.listen((event) {
+      final data = Map<String, dynamic>.from(event.snapshot.value as Map? ?? {});
+      state = state.copyWith(hostId: data["hostId"].toString());
+    });
+    FirebaseDatabase.instance.ref('rooms/$code/players').onValue.listen((event) {
+      final data = Map<String, dynamic>.from(event.snapshot.value as Map? ?? {});
+      final updatedPlayers = data.entries.map((e) {
+        final p = Map<String, dynamic>.from(e.value);
+        return WhoLiedPlayer(id: e.key, name: p['name'] ?? '');
+      }).toList();
+      state = state.copyWith(players: updatedPlayers);
+    });
   }
 
   void beginDiscussionPhase() {
@@ -274,34 +295,6 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       votesByVoterId: {
         ...state.votesByVoterId,
         meId: votedPlayerId,
-      },
-    );
-  }
-
-  void botCastOneVote() {
-    if (state.phase != GamePhase.voting) return;
-
-    final meId = state.myPlayerId;
-    if (meId == null) return;
-
-    final voters = state.players.map((p) => p.id).toList();
-    final missingVoters = voters.where((id) => !state.votesByVoterId.containsKey(id)).toList();
-    if (missingVoters.isEmpty) return;
-
-    // Pick a bot voter if available; otherwise the same device "player".
-    final botMissing = state.players.where((p) => p.isBot && missingVoters.contains(p.id)).toList();
-    final voter = (botMissing.isNotEmpty ? botMissing : state.players.where((p) => missingVoters.contains(p.id)).toList());
-    if (voter.isEmpty) return;
-    final chosenVoter = voter[_rand.nextInt(voter.length)];
-
-    final candidates = state.players.map((p) => p.id).where((id) => id != chosenVoter.id).toList();
-    if (candidates.isEmpty) return;
-    final votedId = candidates[_rand.nextInt(candidates.length)];
-
-    state = state.copyWith(
-      votesByVoterId: {
-        ...state.votesByVoterId,
-        chosenVoter.id: votedId,
       },
     );
   }

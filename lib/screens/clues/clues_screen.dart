@@ -82,15 +82,6 @@ class _CluesScreenState extends ConsumerState<CluesScreen> {
                 ),
               ],
             ),
-            if (!game.cluePhaseLocked)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: OutlinedButton.icon(
-                  onPressed: controller.botSubmitOneClue,
-                  icon: const Icon(Icons.auto_awesome_outlined),
-                  label: const Text('Simulate Bot Clue'),
-                ),
-              ),
             const SizedBox(height: 16),
             Text(
               'Submitted clues',
