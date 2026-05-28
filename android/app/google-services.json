@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "906391927011",
+    "project_id": "tuushars-who-lied",
+    "storage_bucket": "tuushars-who-lied.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906391927011:android:1e21f524ed8c0144e26dd6",
+        "android_client_info": {
+          "package_name": "com.example.who_lied"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUaVJLdQC10086kJY8LFlMcI6pxmrJlW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
