@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes pulse-glitch {
+            0% { transform: scale(1); text-shadow: 0 0 0px rgba(223, 183, 255, 0); }
+            50% { transform: scale(1.02); text-shadow: 4px 4px 0px rgba(157, 5, 255, 0.5); }
+            100% { transform: scale(1); text-shadow: 0 0 0px rgba(223, 183, 255, 0); }
+        }
+        .animate-room-code {
+            animation: pulse-glitch 2s infinite ease-in-out;
+        }
+        .squish-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 rgba(0,0,0,1) !important;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "surface-tint": "#ffb1c3",
+                        "primary-fixed": "#ffd9e0",
+                        "surface-container-low": "#28161b",
+                        "primary": "#ffb1c3",
+                        "on-tertiary-fixed-variant": "#095300",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#19090d",
+                        "secondary-fixed-dim": "#dfb7ff",
+                        "surface": "#1f0e13",
+                        "secondary-container": "#9d05ff",
+                        "surface-container": "#2d1a1f",
+                        "on-secondary-fixed": "#2d004f",
+                        "on-tertiary-container": "#043200",
+                        "secondary": "#dfb7ff",
+                        "on-secondary": "#4b007e",
+                        "tertiary-fixed-dim": "#2ae500",
+                        "on-surface": "#fbdae0",
+                        "on-secondary-fixed-variant": "#6b00b0",
+                        "surface-container-high": "#382529",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#f7e6ff",
+                        "surface-variant": "#442f34",
+                        "on-primary-fixed": "#3f0019",
+                        "tertiary": "#2ae500",
+                        "on-tertiary": "#053900",
+                        "inverse-primary": "#bb0058",
+                        "outline-variant": "#5c3f45",
+                        "surface-bright": "#493338",
+                        "secondary-fixed": "#f1daff",
+                        "on-primary": "#66002c",
+                        "on-tertiary-fixed": "#022100",
+                        "on-background": "#fbdae0",
+                        "outline": "#ac878f",
+                        "primary-fixed-dim": "#ffb1c3",
+                        "surface-container-highest": "#442f34",
+                        "on-primary-fixed-variant": "#8f0041",
+                        "tertiary-fixed": "#79ff5b",
+                        "on-primary-container": "#590026",
+                        "tertiary-container": "#1da800",
+                        "surface-dim": "#1f0e13",
+                        "inverse-surface": "#fbdae0",
+                        "inverse-on-surface": "#3f2b2f",
+                        "background": "#1f0e13",
+                        "on-surface-variant": "#e5bcc4",
+                        "primary-container": "#ff4b89"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "unit": "8px",
+                        "stack-gap": "12px",
+                        "gutter": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-xl": ["Anybody"],
+                        "label-bold": ["Hanken Grotesk"],
+                        "headline-md": ["Anybody"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-xl-mobile": ["Anybody"],
+                        "headline-lg": ["Anybody"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900" }],
+                        "label-bold": ["14px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "1.5", "fontWeight": "500" }],
+                        "headline-xl-mobile": ["36px", { "lineHeight": "1.1", "fontWeight": "900" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary selection:text-on-primary min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b-4 border-secondary shadow-[0_4px_0_0_rgba(157,5,255,1)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-105 transition-transform active:translate-y-1">menu</span>
+<h1 class="text-headline-md-mobile font-headline-md font-black tracking-tighter text-primary uppercase">The Lobby</h1>
+</div>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-105 transition-transform active:translate-y-1">settings</span>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-24 pb-32 px-margin-mobile flex flex-col items-center">
+<!-- Room Code Section -->
+<section class="w-full max-w-[600px] mb-8">
+<div class="bg-surface-container border-2 border-secondary rounded-xl p-6 flex flex-col items-center gap-4 shadow-[0_4px_0_0_rgba(157,5,255,0.4)] overflow-hidden relative">
+<div class="absolute top-0 right-0 p-2 opacity-20">
+<span class="material-symbols-outlined text-[100px]" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<span class="text-label-sm font-label-sm uppercase tracking-[0.2em] text-on-surface-variant">Room Code</span>
+<div class="flex items-center gap-6">
+<div class="animate-room-code font-headline-xl-mobile text-headline-xl-mobile md:text-headline-xl tracking-[0.2em] font-black text-primary bg-black/40 px-6 py-2 rounded-lg border-2 border-primary/20">
+                        X J 9 2
+                    </div>
+<button class="squish-button bg-secondary text-on-secondary p-4 rounded-xl shadow-[0_4px_0_0_rgba(75,0,126,1)] flex items-center justify-center transition-all">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+<div class="flex items-center gap-2 px-4 py-1 bg-on-error-container rounded-full text-error border border-error/30">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="text-label-bold font-label-bold uppercase">Adult 18+</span>
+</div>
+</div>
+</section>
+<!-- Player List Section -->
+<section class="w-full max-w-[600px] mb-8">
+<div class="flex justify-between items-end mb-4 px-2">
+<h2 class="text-headline-md font-headline-md text-secondary">Players</h2>
+<span class="text-label-bold font-label-bold text-tertiary">4/8 JOINED</span>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<!-- Player 1 -->
+<div class="bg-surface-container-high border-2 border-outline-variant p-4 rounded-xl flex justify-between items-center group hover:border-tertiary transition-colors shadow-[4px_4px_0_0_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-tertiary bg-surface-container-lowest flex items-center justify-center text-2xl">🔥</div>
+<span class="text-body-lg font-body-lg">Player1</span>
+</div>
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-label-sm font-label-sm uppercase">Host</span>
+</div>
+</div>
+<!-- Player 2 -->
+<div class="bg-surface-container-high border-2 border-outline-variant p-4 rounded-xl flex justify-between items-center shadow-[4px_4px_0_0_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-outline bg-surface-container-lowest flex items-center justify-center text-2xl">👾</div>
+<span class="text-body-lg font-body-lg">Player2</span>
+</div>
+</div>
+<!-- Player 3 -->
+<div class="bg-surface-container-high border-2 border-outline-variant p-4 rounded-xl flex justify-between items-center shadow-[4px_4px_0_0_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-outline bg-surface-container-lowest flex items-center justify-center text-2xl">👻</div>
+<span class="text-body-lg font-body-lg">Player3</span>
+</div>
+</div>
+<!-- Player 4 -->
+<div class="bg-surface-container-high border-2 border-outline-variant p-4 rounded-xl flex justify-between items-center shadow-[4px_4px_0_0_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-outline bg-surface-container-lowest flex items-center justify-center text-2xl">🐱</div>
+<span class="text-body-lg font-body-lg">Player4</span>
+</div>
+</div>
+<!-- Empty Slots -->
+<div class="border-2 border-dashed border-outline-variant/30 p-4 rounded-xl flex justify-center items-center opacity-40">
+<span class="text-label-bold font-label-bold uppercase italic">Waiting for players...</span>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="w-full max-w-[600px] mt-auto">
+<button class="squish-button w-full bg-tertiary text-on-tertiary py-5 rounded-xl font-headline-md text-headline-md uppercase tracking-widest shadow-[0_6px_0_0_rgba(9,83,0,1)] hover:scale-[1.01] active:scale-[0.98] transition-all">
+                START GAME
+            </button>
+<p class="text-center mt-4 text-label-sm font-label-sm text-on-surface-variant opacity-60">
+                NEED AT LEAST 4 PLAYERS TO START
+            </p>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container border-t-4 border-outline shadow-[0_-4px_0_0_rgba(0,0,0,0.5)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Reveal</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-tertiary text-on-tertiary rounded-xl px-4 py-1 translate-y-[-4px] shadow-[0_4px_0_0_rgba(9,83,0,1)] scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Clue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Discuss</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">how_to_vote</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Vote</span>
+</a>
+</nav>
+<!-- Visual Atmosphere -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden opacity-20">
+<div class="absolute top-1/4 -left-20 w-80 h-80 bg-secondary rounded-full blur-[120px]"></div>
+<div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-primary rounded-full blur-[120px]"></div>
+</div>
+</body></html>

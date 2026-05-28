@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WhoLied? - Discussion Phase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@800;900&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "surface-tint": "#ffb1c3",
+                        "primary-fixed": "#ffd9e0",
+                        "surface-container-low": "#28161b",
+                        "primary": "#ffb1c3",
+                        "on-tertiary-fixed-variant": "#095300",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#19090d",
+                        "secondary-fixed-dim": "#dfb7ff",
+                        "surface": "#1f0e13",
+                        "secondary-container": "#9d05ff",
+                        "surface-container": "#2d1a1f",
+                        "on-secondary-fixed": "#2d004f",
+                        "on-tertiary-container": "#043200",
+                        "secondary": "#dfb7ff",
+                        "on-secondary": "#4b007e",
+                        "tertiary-fixed-dim": "#2ae500",
+                        "on-surface": "#fbdae0",
+                        "on-secondary-fixed-variant": "#6b00b0",
+                        "surface-container-high": "#382529",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#f7e6ff",
+                        "surface-variant": "#442f34",
+                        "on-primary-fixed": "#3f0019",
+                        "tertiary": "#2ae500",
+                        "on-tertiary": "#053900",
+                        "inverse-primary": "#bb0058",
+                        "outline-variant": "#5c3f45",
+                        "surface-bright": "#493338",
+                        "secondary-fixed": "#f1daff",
+                        "on-primary": "#66002c",
+                        "on-tertiary-fixed": "#022100",
+                        "on-background": "#fbdae0",
+                        "outline": "#ac878f",
+                        "primary-fixed-dim": "#ffb1c3",
+                        "surface-container-highest": "#442f34",
+                        "on-primary-fixed-variant": "#8f0041",
+                        "tertiary-fixed": "#79ff5b",
+                        "on-primary-container": "#590026",
+                        "tertiary-container": "#1da800",
+                        "surface-dim": "#1f0e13",
+                        "inverse-surface": "#fbdae0",
+                        "inverse-on-surface": "#3f2b2f",
+                        "background": "#1f0e13",
+                        "on-surface-variant": "#e5bcc4",
+                        "primary-container": "#ff4b89",
+                        "hot-orange": "#FF5C00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "unit": "8px",
+                        "stack-gap": "12px",
+                        "gutter": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-xl": ["Anybody"],
+                        "label-bold": ["Hanken Grotesk"],
+                        "headline-md": ["Anybody"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-xl-mobile": ["Anybody"],
+                        "headline-lg": ["Anybody"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "headline-xl-mobile": ["36px", {"lineHeight": "1.1", "fontWeight": "900"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chunky-shadow {
+            box-shadow: 0 4px 0 0 rgba(0, 0, 0, 1);
+        }
+        .pressed {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 rgba(0, 0, 0, 1);
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px) rotate(-1deg); }
+            75% { transform: translateX(4px) rotate(1deg); }
+        }
+        .timer-warning {
+            animation: shake 0.2s infinite;
+        }
+        .floating-message {
+            animation: floatIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes floatIn {
+            from { transform: translateY(20px) scale(0.9); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .neon-glow-pink {
+            box-shadow: 0 0 15px rgba(255, 75, 137, 0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-surface border-b-4 border-secondary shadow-[0_4px_0_0_rgba(157,5,255,1)] flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary hover:scale-105 transition-transform cursor-pointer" data-icon="menu">menu</span>
+<h1 class="text-headline-md-mobile font-headline-md font-black tracking-tighter text-primary uppercase">Phase 2: Discuss</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary hover:scale-105 transition-transform cursor-pointer" data-icon="settings">settings</span>
+</div>
+</nav>
+<main class="mt-20 px-margin-mobile pb-32 max-w-[600px] mx-auto">
+<!-- Timer Section -->
+<section class="mb-8">
+<div class="bg-surface-container rounded-xl p-4 border-2 border-outline-variant relative overflow-hidden">
+<div class="flex justify-between items-end mb-2">
+<span class="text-label-bold font-label-bold uppercase tracking-widest text-on-surface-variant">Time Remaining</span>
+<span class="text-headline-md font-headline-md text-hot-orange" id="timer-text">60s</span>
+</div>
+<div class="h-4 w-full bg-black/40 rounded-full border border-outline-variant overflow-hidden">
+<div class="h-full bg-hot-orange transition-all duration-1000" id="timer-bar" style="width: 100%"></div>
+</div>
+<p class="mt-3 text-center text-label-bold font-label-bold text-tertiary animate-pulse" id="voting-note">VOTING STARTS SOON...</p>
+</div>
+</section>
+<!-- Clue List -->
+<section class="space-y-stack-gap">
+<h2 class="text-headline-md-mobile font-headline-md text-secondary uppercase mb-4">The Clue Trail</h2>
+<!-- Clue Card 1 -->
+<div class="floating-message bg-surface-container-high border-2 border-secondary p-4 rounded-xl flex gap-4 items-center chunky-shadow">
+<div class="w-12 h-12 rounded-full border-2 border-primary overflow-hidden flex-shrink-0">
+<img alt="Player 1 Avatar" class="w-full h-full object-cover" data-alt="A stylized 3D avatar of a trendy young man with colorful hair and streetwear, set against a dark purple background with neon highlights, matching a social deduction game aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7FG-7IRYoPs3HXGfwT2cMWyzG70XbjmsWSA5q1OzUVgXaG6MBT-hN7iUD5-RPOj-YmK38w-1aFyqsiaAMfjnp1hwrnWZgnVzUhVL7SJ-UmU8V4DNjIb0GW-HkH_knVEo_s9zXknmx8pVmIsl3t9bzCacjEoIv4keyFgr3jtEmPII6pQd-HUz0RR3-yyZuXSeln2-ylLj8O72Ey-tqbVj5ksQBr5Xcs_k71rPXNQ2rr819MUKgTQeIRjaWSSN1ZFYJNe5DotlUxj8"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<span class="text-label-bold font-label-bold text-primary">PLAYER 1</span>
+<span class="text-xs opacity-50">Just now</span>
+</div>
+<div class="bg-black/20 p-3 rounded-lg border-l-4 border-primary">
+<p class="text-body-md font-body-md italic">"Tropical fruit"</p>
+</div>
+</div>
+</div>
+<!-- Clue Card 2 -->
+<div class="floating-message bg-surface-container-high border-2 border-secondary p-4 rounded-xl flex gap-4 items-center chunky-shadow" style="animation-delay: 0.1s;">
+<div class="w-12 h-12 rounded-full border-2 border-tertiary overflow-hidden flex-shrink-0">
+<img alt="Player 2 Avatar" class="w-full h-full object-cover" data-alt="A stylized 3D avatar of a cool young woman with neon glasses and futuristic fashion, set against a dark navy background with vibrant green glow effects." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClHJsdsgZbcKwvz26vD0Z2KeZaG1wNpm4GmKTB7mT1Cg9uMLEX1PCQeKKOreBc5sL3v3PpIdLd3GNSzwKpG5b9uOtOn8E5GzAqc2N5H6wTHcCkBzKrcWTGLRpNajXmeKwjc0w2AoDjR6iaLJLtzvQr9wyCzzazfa9lId6cpJ9pFUU4ppurridFfxPmAeE7NyiBK4kK6T-BBI72GlJF-IaPGDzs211jVSdpCqf5D0aj4C8XnR6ZEYHDZK0UPV2JwzrymuGcmOpfIHs"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<span class="text-label-bold font-label-bold text-tertiary">PLAYER 2</span>
+<span class="text-xs opacity-50">12s ago</span>
+</div>
+<div class="bg-black/20 p-3 rounded-lg border-l-4 border-tertiary">
+<p class="text-body-md font-body-md italic">"Italian controversy"</p>
+</div>
+</div>
+</div>
+<!-- Clue Card 3 -->
+<div class="floating-message bg-surface-container-high border-2 border-secondary p-4 rounded-xl flex gap-4 items-center chunky-shadow" style="animation-delay: 0.2s;">
+<div class="w-12 h-12 rounded-full border-2 border-primary-container overflow-hidden flex-shrink-0">
+<img alt="Player 3 Avatar" class="w-full h-full object-cover" data-alt="A playful 3D character illustration with oversized headphones and a bright orange hoodie, illuminated by harsh pink studio lighting against a dark textured wall." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV2maPzE-zwKUpDkDnRpYEqeDNYnBUc0Grne4kp1IfO8g0X-3ITyzhXf6Dt69YZL0RCz7XhKodx2HML0K2n5BihnNzIKXI9_MchOxAQNgV83kTcJuP-GBR9954x2lJhd1mJSg9Tih6iY0fbPaSAJbp-251DyJARQlrcVdE2pmjnheZTFGxhPSrzZDDfAET3tVzw9aZ2g3jHhLA2L6mgGgLxMUVrgFiTEd3b9pcm8dAhFvSQvHdt6rhuu2TAuLL0_0uouhgXVZ7Ghw"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<span class="text-label-bold font-label-bold text-primary-container">PLAYER 3</span>
+<span class="text-xs opacity-50">25s ago</span>
+</div>
+<div class="bg-black/20 p-3 rounded-lg border-l-4 border-primary-container">
+<p class="text-body-md font-body-md italic">"Yellow spikes"</p>
+</div>
+</div>
+</div>
+<!-- Clue Card 4 -->
+<div class="floating-message bg-surface-container-high border-2 border-secondary p-4 rounded-xl flex gap-4 items-center chunky-shadow" style="animation-delay: 0.3s;">
+<div class="w-12 h-12 rounded-full border-2 border-secondary overflow-hidden flex-shrink-0">
+<img alt="Player 4 Avatar" class="w-full h-full object-cover" data-alt="A high-contrast digital art avatar of a mysterious person in a leather jacket with neon purple backlighting, emphasizing sharp features and a suspicious expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7FG-7IRYoPs3HXGfwT2cMWyzG70XbjmsWSA5q1OzUVgXaG6MBT-hN7iUD5-RPOj-YmK38w-1aFyqsiaAMfjnp1hwrnWZgnVzUhVL7SJ-UmU8V4DNjIb0GW-HkH_knVEo_s9zXknmx8pVmIsl3t9bzCacjEoIv4keyFgr3jtEmPII6pQd-HUz0RR3-yyZuXSeln2-ylLj8O72Ey-tqbVj5ksQBr5Xcs_k71rPXNQ2rr819MUKgTQeIRjaWSSN1ZFYJNe5DotlUxj8"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<span class="text-label-bold font-label-bold text-secondary">PLAYER 4</span>
+<span class="text-xs opacity-50">40s ago</span>
+</div>
+<div class="bg-black/20 p-3 rounded-lg border-l-4 border-secondary">
+<p class="text-body-md font-body-md italic">"Sweet &amp; Savory"</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Input Section -->
+<section class="mt-8 space-y-4">
+<div class="relative">
+<input class="w-full bg-black border-2 border-primary text-on-surface font-body-md p-4 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none neon-glow-pink" placeholder="Type your counter-argument..." type="text"/>
+<button class="absolute right-2 top-2 h-10 w-10 bg-primary text-on-primary rounded-lg flex items-center justify-center chunky-shadow active:translate-y-1 active:shadow-none transition-all">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="flex-shrink-0 px-4 py-2 bg-surface-container border-2 border-outline-variant rounded-full text-label-bold font-label-bold hover:border-tertiary transition-colors">LIAR! 🤥</button>
+<button class="flex-shrink-0 px-4 py-2 bg-surface-container border-2 border-outline-variant rounded-full text-label-bold font-label-bold hover:border-tertiary transition-colors">TRUST ME 🤝</button>
+<button class="flex-shrink-0 px-4 py-2 bg-surface-container border-2 border-outline-variant rounded-full text-label-bold font-label-bold hover:border-tertiary transition-colors">SUS... 👀</button>
+<button class="flex-shrink-0 px-4 py-2 bg-surface-container border-2 border-outline-variant rounded-full text-label-bold font-label-bold hover:border-tertiary transition-colors">HOW? 🤔</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container border-t-4 border-outline shadow-[0_-4px_0_0_rgba(0,0,0,0.5)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant rounded-xl p-2 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Reveal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant rounded-xl p-2 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Clue</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-tertiary text-on-tertiary rounded-xl px-4 py-1 translate-y-[-4px] shadow-[0_4px_0_0_rgba(9,83,0,1)] scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="forum" style="font-variation-settings: 'FILL' 1;">forum</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Discuss</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant rounded-xl p-2 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_vote">how_to_vote</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Vote</span>
+</a>
+</nav>
+<script>
+        // Simple Timer Logic
+        let timeLeft = 60;
+        const timerText = document.getElementById('timer-text');
+        const timerBar = document.getElementById('timer-bar');
+        const timerContainer = timerBar.parentElement.parentElement;
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerText.innerText = "VOTE!";
+            } else {
+                timerText.innerText = timeLeft + "s";
+                timerBar.style.width = (timeLeft / 60 * 100) + "%";
+                
+                // Add frantic energy at < 10s
+                if (timeLeft < 10) {
+                    timerText.classList.add('timer-warning');
+                    timerBar.classList.add('bg-error');
+                    timerBar.classList.remove('bg-hot-orange');
+                }
+            }
+        }, 1000);
+
+        // Simulation of chaotic energy with random "pop-ins"
+        const playerClues = [
+            "Wait, P3 is definitely lying...",
+            "Pineapple on pizza?",
+            "I saw P2 looking nervous!",
+            "Tropical? P1 is playing it safe."
+        ];
+
+        function spawnFloatingText() {
+            const text = playerClues[Math.floor(Math.random() * playerClues.length)];
+            const bubble = document.createElement('div');
+            bubble.className = 'fixed pointer-events-none text-tertiary font-label-bold text-sm bg-black/80 px-3 py-1 rounded-full border border-tertiary opacity-0 transition-opacity duration-1000 z-40';
+            bubble.innerText = text;
+            
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 200) + 100;
+            
+            bubble.style.left = `${x}px`;
+            bubble.style.top = `${y}px`;
+            
+            document.body.appendChild(bubble);
+            
+            requestAnimationFrame(() => {
+                bubble.style.opacity = '1';
+                setTimeout(() => {
+                    bubble.style.opacity = '0';
+                    setTimeout(() => bubble.remove(), 1000);
+                }, 2000);
+            });
+        }
+
+        setInterval(spawnFloatingText, 3500);
+    </script>
+</body></html>

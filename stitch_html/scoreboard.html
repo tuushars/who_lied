@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WhoLied? - Scoreboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#690005",
+                    "surface-tint": "#ffb1c3",
+                    "primary-fixed": "#ffd9e0",
+                    "surface-container-low": "#28161b",
+                    "primary": "#ffb1c3",
+                    "on-tertiary-fixed-variant": "#095300",
+                    "error": "#ffb4ab",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#19090d",
+                    "secondary-fixed-dim": "#dfb7ff",
+                    "surface": "#1f0e13",
+                    "secondary-container": "#9d05ff",
+                    "surface-container": "#2d1a1f",
+                    "on-secondary-fixed": "#2d004f",
+                    "on-tertiary-container": "#043200",
+                    "secondary": "#dfb7ff",
+                    "on-secondary": "#4b007e",
+                    "tertiary-fixed-dim": "#2ae500",
+                    "on-surface": "#fbdae0",
+                    "on-secondary-fixed-variant": "#6b00b0",
+                    "surface-container-high": "#382529",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-container": "#f7e6ff",
+                    "surface-variant": "#442f34",
+                    "on-primary-fixed": "#3f0019",
+                    "tertiary": "#2ae500",
+                    "on-tertiary": "#053900",
+                    "inverse-primary": "#bb0058",
+                    "outline-variant": "#5c3f45",
+                    "surface-bright": "#493338",
+                    "secondary-fixed": "#f1daff",
+                    "on-primary": "#66002c",
+                    "on-tertiary-fixed": "#022100",
+                    "on-background": "#fbdae0",
+                    "outline": "#ac878f",
+                    "primary-fixed-dim": "#ffb1c3",
+                    "surface-container-highest": "#442f34",
+                    "on-primary-fixed-variant": "#8f0041",
+                    "tertiary-fixed": "#79ff5b",
+                    "on-primary-container": "#590026",
+                    "tertiary-container": "#1da800",
+                    "surface-dim": "#1f0e13",
+                    "inverse-surface": "#fbdae0",
+                    "inverse-on-surface": "#3f2b2f",
+                    "background": "#1f0e13",
+                    "on-surface-variant": "#e5bcc4",
+                    "primary-container": "#ff4b89"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "stack-gap": "12px",
+                    "gutter": "16px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "body-md": ["Hanken Grotesk"],
+                    "headline-xl": ["Anybody"],
+                    "label-bold": ["Hanken Grotesk"],
+                    "headline-md": ["Anybody"],
+                    "body-lg": ["Hanken Grotesk"],
+                    "headline-xl-mobile": ["Anybody"],
+                    "headline-lg": ["Anybody"],
+                    "label-sm": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                    "label-bold": ["14px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "headline-xl-mobile": ["36px", {"lineHeight": "1.1", "fontWeight": "900"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .chunky-button {
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .chunky-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 rgba(0,0,0,0.5);
+        }
+        .card-inner-glow {
+            box-shadow: inset 0 0 10px rgba(223, 183, 255, 0.1);
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 75, 137, 0.5), 0 0 0 2px #ff4b89; }
+            50% { box-shadow: 0 0 20px rgba(255, 75, 137, 0.8), 0 0 0 4px #ff4b89; }
+        }
+        .winner-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface flex justify-between items-center px-margin-mobile h-16 border-b-4 border-secondary shadow-[0_4px_0_0_rgba(157,5,255,1)]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-105 transition-transform active:translate-y-1">menu</span>
+</div>
+<h1 class="text-headline-md-mobile font-headline-md font-black tracking-tighter text-primary uppercase">Leaderboard</h1>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-105 transition-transform active:translate-y-1">settings</span>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-[600px] mx-auto">
+<!-- Round Summary Card -->
+<section class="mb-gutter">
+<div class="bg-surface-container-high border-2 border-tertiary rounded-xl p-4 card-inner-glow relative overflow-hidden">
+<div class="flex justify-between items-center">
+<div>
+<p class="text-label-sm font-label-sm text-tertiary uppercase tracking-widest">Round 1 Summary</p>
+<h2 class="text-headline-md font-headline-md text-on-surface mt-1">+2 Correct Vote</h2>
+</div>
+<div class="bg-tertiary text-on-tertiary rounded-full p-2 winner-glow">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Podium/Top 3 Bento Style -->
+<section class="grid grid-cols-2 gap-stack-gap mb-gutter">
+<!-- 1st Place -->
+<div class="col-span-2 bg-surface-container border-4 border-primary rounded-xl p-6 relative overflow-hidden winner-glow">
+<div class="absolute top-2 right-4 text-headline-xl opacity-20 font-black italic">#1</div>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full border-4 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized character avatar for a party game, depicting a cool digital persona with neon pink accessories and a dark futuristic background. The style is bold, high-contrast, and energetic, fitting for a competitive social game for Gen-Z players." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNdbZHSfnh8hSAkwF2fiuX3XmdEFJsN2Gdk-YlqHIqcysbECzP4HZi6ihFRuccakZSPUCOOrQmF0kzOjRpbp3MBq6_rIqjcqPq87ABhcz9k-eHiXKY2PbGbvsEBuVMASTnlnecFoUJ4a1glR7Tg3vyRmFDsQoug6Bq9KuscWswEzmBiOzjITikn6uZ7t5onOenqMElrBdg_hi_3KcKiS7H5LSEwL19IXC8sPwSCaoIuST5bRsGgXl_ZuOD5Vhe07AK5cXmtwyy264"/>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-primary">Player 3</h3>
+<p class="text-label-bold font-label-bold text-on-surface-variant uppercase">12 PTS</p>
+</div>
+</div>
+<div class="mt-4 bg-primary/10 rounded-lg p-2 border border-primary/30 flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-primary uppercase">Top Deceiver</span>
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+<!-- 2nd Place -->
+<div class="bg-surface-container border-2 border-secondary rounded-xl p-4">
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full border-2 border-secondary mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A digital avatar portrait of a competitive gamer character with purple accents and a dark navy background. The character has an intense, focused expression, rendered in a modern vector art style with high-contrast shadows and neon highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3UtCZKo1Onn8-FGlpwb90tFdV_WYtxn4C3pKYxxmSlprsI7uffwZWOOGRHSAjpt9roDNYQM_g_UW5LSvA8gtp0PB14V3wPUOQq0ldf1xNn--8AjyLa7-LjFfw-gFmlF2H1ihp2m0duWFCkipdTQ2mTM7G6C3cJoqiI4U7ZphKTaKxOD6LA_hJGcciOWPswEyI2dPTmjCmsiAg1WEp-SYptWzCKi6A5ojhST5r1azk3Bsk1WqCyVb8ppUXM4wuMxI1AHA-sMH4zjY"/>
+</div>
+<p class="text-label-bold font-label-bold text-on-surface">Player 1</p>
+<p class="text-headline-md font-headline-md text-secondary">10</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase">PTS</p>
+</div>
+</div>
+<!-- 3rd Place -->
+<div class="bg-surface-container border-2 border-outline rounded-xl p-4">
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full border-2 border-outline mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A sleek digital avatar of a player with subtle glowing outlines and a minimalist mask. The background is a deep charcoal grey with geometric neon patterns. The visual mood is mysterious and playful, aligning with the arcade-maximalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi2dauSmVyPJbiPrujLeo43GaaDnXmiQ6HeBWbxcGgnvdQfBXCkmiX2WfbVvThHqvUmlxCDarDbUSSsWaYAXalqCe0_DFO1O_kVL3MfBRwDHR3ceKurK5mnbbEyQfeVUokxCPLRi4zNb2cKQYA53nYqFXHfwbGkq9nQtz_qpstKOBqKRE4kKINuirvWuC_nHw5uxKqwlhoGvlh6OgIAkD7TZQsr2SCd6BWOdrcZtsMmgQhXLTjxO-QKiawZnJ3rs6ZQFSrvbgf1mU"/>
+</div>
+<p class="text-label-bold font-label-bold text-on-surface">Player 2</p>
+<p class="text-headline-md font-headline-md text-outline">8</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase">PTS</p>
+</div>
+</div>
+</section>
+<!-- The Rest of the Players -->
+<section class="space-y-stack-gap mb-gutter">
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-label-bold font-label-bold text-on-surface-variant w-4">4</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant"></div>
+<span class="text-body-md font-body-md text-on-surface">Player 4</span>
+</div>
+<span class="text-label-bold font-label-bold text-on-surface">6 PTS</span>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-label-bold font-label-bold text-on-surface-variant w-4">5</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant"></div>
+<span class="text-body-md font-body-md text-on-surface">Player 5</span>
+</div>
+<span class="text-label-bold font-label-bold text-on-surface">4 PTS</span>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-label-bold font-label-bold text-on-surface-variant w-4">6</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant"></div>
+<span class="text-body-md font-body-md text-on-surface">Player 6</span>
+</div>
+<span class="text-label-bold font-label-bold text-on-surface">2 PTS</span>
+</div>
+</section>
+<!-- CTA Cluster -->
+<section class="flex flex-col gap-3 mt-10">
+<button class="chunky-button w-full bg-tertiary text-on-tertiary py-4 rounded-xl text-label-bold font-label-bold border-b-4 border-black shadow-[0_4px_0_0_rgba(9,83,0,1)] flex items-center justify-center gap-2 uppercase tracking-widest">
+<span class="material-symbols-outlined">replay</span> PLAY AGAIN
+            </button>
+<div class="grid grid-cols-2 gap-3">
+<button class="chunky-button bg-secondary text-on-secondary py-3 rounded-xl text-label-bold font-label-bold border-b-4 border-black shadow-[0_4px_0_0_rgba(107,0,176,1)] uppercase">
+                    NEW GAME
+                </button>
+<button class="chunky-button bg-surface-variant text-on-surface py-3 rounded-xl text-label-bold font-label-bold border-b-4 border-black shadow-[0_4px_0_0_rgba(0,0,0,0.5)] uppercase">
+                    EXIT
+                </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container border-t-4 border-outline shadow-[0_-4px_0_0_rgba(0,0,0,0.5)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-transform" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Reveal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-transform" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Clue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-transform" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Discuss</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-tertiary text-on-tertiary rounded-xl px-4 py-1 translate-y-[-4px] shadow-[0_4px_0_0_rgba(9,83,0,1)] scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">how_to_vote</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Vote</span>
+</a>
+</nav>
+<script>
+        // Atmospheric Micro-interactions
+        document.querySelectorAll('.chunky-button').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'scale(1.02)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple score animation on load
+        window.addEventListener('load', () => {
+            const scores = document.querySelectorAll('.text-headline-md');
+            scores.forEach(score => {
+                const finalValue = parseInt(score.innerText);
+                if (!isNaN(finalValue)) {
+                    let start = 0;
+                    const duration = 1000;
+                    const increment = finalValue / (duration / 16);
+                    const timer = setInterval(() => {
+                        start += increment;
+                        if (start >= finalValue) {
+                            score.innerText = finalValue;
+                            clearInterval(timer);
+                        } else {
+                            score.innerText = Math.floor(start);
+                        }
+                    }, 16);
+                }
+            });
+        });
+    </script>
+</body></html>

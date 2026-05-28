@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@100..900&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0A0510;
+            color: #fbdae0;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chunky-button {
+            transition: all 0.1s ease-out;
+        }
+        .chunky-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 rgba(0,0,0,0.5) !important;
+        }
+        .inner-glow-card {
+            box-shadow: inset 0 0 10px rgba(223, 183, 255, 0.1);
+        }
+        @keyframes pulse-neon {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .neon-pulse {
+            animation: pulse-neon 2s infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "surface-tint": "#ffb1c3",
+                        "primary-fixed": "#ffd9e0",
+                        "surface-container-low": "#28161b",
+                        "primary": "#ffb1c3",
+                        "on-tertiary-fixed-variant": "#095300",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#19090d",
+                        "secondary-fixed-dim": "#dfb7ff",
+                        "surface": "#1f0e13",
+                        "secondary-container": "#9d05ff",
+                        "surface-container": "#2d1a1f",
+                        "on-secondary-fixed": "#2d004f",
+                        "on-tertiary-container": "#043200",
+                        "secondary": "#dfb7ff",
+                        "on-secondary": "#4b007e",
+                        "tertiary-fixed-dim": "#2ae500",
+                        "on-surface": "#fbdae0",
+                        "on-secondary-fixed-variant": "#6b00b0",
+                        "surface-container-high": "#382529",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#f7e6ff",
+                        "surface-variant": "#442f34",
+                        "on-primary-fixed": "#3f0019",
+                        "tertiary": "#2ae500",
+                        "on-tertiary": "#053900",
+                        "inverse-primary": "#bb0058",
+                        "outline-variant": "#5c3f45",
+                        "surface-bright": "#493338",
+                        "secondary-fixed": "#f1daff",
+                        "on-primary": "#66002c",
+                        "on-tertiary-fixed": "#022100",
+                        "on-background": "#fbdae0",
+                        "outline": "#ac878f",
+                        "primary-fixed-dim": "#ffb1c3",
+                        "surface-container-highest": "#442f34",
+                        "on-primary-fixed-variant": "#8f0041",
+                        "tertiary-fixed": "#79ff5b",
+                        "on-primary-container": "#590026",
+                        "tertiary-container": "#1da800",
+                        "surface-dim": "#1f0e13",
+                        "inverse-surface": "#fbdae0",
+                        "inverse-on-surface": "#3f2b2f",
+                        "background": "#1f0e13",
+                        "on-surface-variant": "#e5bcc4",
+                        "primary-container": "#ff4b89"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "unit": "8px",
+                        "stack-gap": "12px",
+                        "gutter": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-xl": ["Anybody"],
+                        "label-bold": ["Hanken Grotesk"],
+                        "headline-md": ["Anybody"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-xl-mobile": ["Anybody"],
+                        "headline-lg": ["Anybody"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "headline-xl-mobile": ["36px", {"lineHeight": "1.1", "fontWeight": "900"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen flex flex-col font-body-md selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="bg-surface sticky top-0 z-50 flex justify-between items-center w-full px-margin-mobile h-16 border-b-4 border-secondary shadow-[0_4px_0_0_rgba(157,5,255,1)]">
+<div class="flex items-center gap-4">
+<button class="text-primary hover:scale-105 transition-transform active:translate-y-1">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-headline-md-mobile font-headline-md font-black tracking-tighter text-primary uppercase">WhoLied?</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-primary hover:scale-105 transition-transform active:translate-y-1">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile py-10 max-w-[600px] mx-auto w-full">
+<!-- Hero Visual Section -->
+<div class="relative w-full mb-12 flex justify-center">
+<div class="absolute -top-10 -left-4 w-32 h-32 bg-secondary/20 blur-3xl rounded-full"></div>
+<div class="absolute -bottom-10 -right-4 w-32 h-32 bg-tertiary/20 blur-3xl rounded-full"></div>
+<div class="relative z-10 w-full aspect-square max-w-[280px] rounded-full border-4 border-primary p-2 shadow-[0_0_20px_rgba(255,177,195,0.4)] overflow-hidden">
+<img alt="Abstract suspicious eye" class="w-full h-full object-cover rounded-full" data-alt="A stylized, neon-lit digital illustration of a single large, suspicious eye centered in a dark, high-contrast environment. The eye is surrounded by glitch-art effects and vibrant magenta and toxic green electricity. The atmosphere is intense and mysterious, matching a dark social deduction game aesthetic with hard shadows and energetic, saturated lighting typical of high-stakes party gaming." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7FG-7IRYoPs3HXGfwT2cMWyzG70XbjmsWSA5q1OzUVgXaG6MBT-hN7iUD5-RPOj-YmK38w-1aFyqsiaAMfjnp1hwrnWZgnVzUhVL7SJ-UmU8V4DNjIb0GW-HkH_knVEo_s9zXknmx8pVmIsl3t9bzCacjEoIv4keyFgr3jtEmPII6pQd-HUz0RR3-yyZuXSeln2-ylLj8O72Ey-tqbVj5ksQBr5Xcs_k71rPXNQ2rr819MUKgTQeIRjaWSSN1ZFYJNe5DotlUxj8"/>
+</div>
+</div>
+<!-- Identity Section -->
+<div class="w-full space-y-6 mb-10">
+<div class="space-y-2 text-center">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface uppercase tracking-tight">Identity Check</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Who are you pretending to be tonight?</p>
+</div>
+<div class="relative group">
+<input class="w-full bg-black border-2 border-outline focus:border-primary text-on-surface text-body-lg font-body-lg px-6 py-4 rounded-xl outline-none transition-all shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)]" placeholder="Enter your alias..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary/50 group-focus-within:text-primary transition-colors" data-icon="fingerprint">fingerprint</span>
+</div>
+</div>
+<!-- Category Selector -->
+<div class="w-full mb-10">
+<div class="flex justify-between items-end mb-4 px-1">
+<span class="font-label-bold text-label-bold uppercase tracking-widest text-secondary">Vibe Check</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant opacity-60">Swipe to choose</span>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-2 px-2 snap-x">
+<button class="snap-center flex-shrink-0 bg-surface-container-high border-2 border-tertiary/40 text-tertiary px-6 py-3 rounded-full font-label-bold text-label-bold hover:bg-tertiary/10 transition-colors">
+                    General
+                </button>
+<button class="snap-center flex-shrink-0 bg-surface-container border-2 border-outline/20 text-on-surface-variant px-6 py-3 rounded-full font-label-bold text-label-bold hover:border-outline transition-colors">
+                    Family
+                </button>
+<button class="snap-center flex-shrink-0 bg-surface-container border-2 border-outline/20 text-on-surface-variant px-6 py-3 rounded-full font-label-bold text-label-bold hover:border-outline transition-colors">
+                    Adult 18+
+                </button>
+<button class="snap-center flex-shrink-0 bg-surface-container border-2 border-outline/20 text-on-surface-variant px-6 py-3 rounded-full font-label-bold text-label-bold hover:border-outline transition-colors">
+                    Nostalgia
+                </button>
+</div>
+</div>
+<!-- Primary Actions -->
+<div class="w-full grid grid-cols-1 gap-6 mb-8">
+<button class="chunky-button group relative w-full bg-primary text-on-primary py-5 rounded-xl border-4 border-black shadow-[0_6px_0_0_#66002c] flex items-center justify-center gap-3">
+<span class="font-headline-md text-headline-md uppercase tracking-tighter">CREATE ROOM</span>
+<span class="material-symbols-outlined font-bold" data-icon="add_circle">add_circle</span>
+</button>
+<button class="chunky-button group relative w-full bg-secondary text-on-secondary py-5 rounded-xl border-4 border-black shadow-[0_6px_0_0_#4b007e] flex items-center justify-center gap-3">
+<span class="font-headline-md text-headline-md uppercase tracking-tighter">JOIN ROOM</span>
+<span class="material-symbols-outlined font-bold" data-icon="group">group</span>
+</button>
+</div>
+<!-- Secondary -->
+<a class="inline-flex items-center gap-2 font-label-bold text-label-bold text-tertiary hover:underline decoration-2 underline-offset-4 group" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help_outline">help_outline</span>
+            HOW TO PLAY
+        </a>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container border-t-4 border-outline shadow-[0_-4px_0_0_rgba(0,0,0,0.5)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-tertiary text-on-tertiary rounded-xl px-4 py-1 translate-y-[-4px] shadow-[0_4px_0_0_rgba(9,83,0,1)] scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Reveal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-colors rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Clue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-colors rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Discuss</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-colors rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_vote">how_to_vote</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest mt-1">Vote</span>
+</a>
+</nav>
+<!-- Hidden decorative spacer for nav -->
+<div class="h-24"></div>
+<script>
+        // Micro-interaction for input shadow intensity
+        const aliasInput = document.querySelector('input');
+        aliasInput.addEventListener('focus', () => {
+            aliasInput.parentElement.classList.add('neon-pulse');
+        });
+        aliasInput.addEventListener('blur', () => {
+            aliasInput.parentElement.classList.remove('neon-pulse');
+        });
+
+        // Horizontal scroll momentum cleanup
+        const scrollContainer = document.querySelector('.overflow-x-auto');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        scrollContainer.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - scrollContainer.offsetLeft;
+            scrollLeft = scrollContainer.scrollLeft;
+        });
+        scrollContainer.addEventListener('mouseleave', () => {
+            isDown = false;
+        });
+        scrollContainer.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+        scrollContainer.addEventListener('mousemove', (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - scrollContainer.offsetLeft;
+            const walk = (x - startX) * 2;
+            scrollContainer.scrollLeft = scrollLeft - walk;
+        });
+    </script>
+</body></html>

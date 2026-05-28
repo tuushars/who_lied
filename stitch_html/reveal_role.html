@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WhoLied? - Role Reveal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@800;900&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "surface-tint": "#ffb1c3",
+                        "primary-fixed": "#ffd9e0",
+                        "surface-container-low": "#28161b",
+                        "primary": "#ffb1c3",
+                        "on-tertiary-fixed-variant": "#095300",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#19090d",
+                        "secondary-fixed-dim": "#dfb7ff",
+                        "surface": "#1f0e13",
+                        "secondary-container": "#9d05ff",
+                        "surface-container": "#2d1a1f",
+                        "on-secondary-fixed": "#2d004f",
+                        "on-tertiary-container": "#043200",
+                        "secondary": "#dfb7ff",
+                        "on-secondary": "#4b007e",
+                        "tertiary-fixed-dim": "#2ae500",
+                        "on-surface": "#fbdae0",
+                        "on-secondary-fixed-variant": "#6b00b0",
+                        "surface-container-high": "#382529",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#f7e6ff",
+                        "surface-variant": "#442f34",
+                        "on-primary-fixed": "#3f0019",
+                        "tertiary": "#2ae500",
+                        "on-tertiary": "#053900",
+                        "inverse-primary": "#bb0058",
+                        "outline-variant": "#5c3f45",
+                        "surface-bright": "#493338",
+                        "secondary-fixed": "#f1daff",
+                        "on-primary": "#66002c",
+                        "on-tertiary-fixed": "#022100",
+                        "on-background": "#fbdae0",
+                        "outline": "#ac878f",
+                        "primary-fixed-dim": "#ffb1c3",
+                        "surface-container-highest": "#442f34",
+                        "on-primary-fixed-variant": "#8f0041",
+                        "tertiary-fixed": "#79ff5b",
+                        "on-primary-container": "#590026",
+                        "tertiary-container": "#1da800",
+                        "surface-dim": "#1f0e13",
+                        "inverse-surface": "#fbdae0",
+                        "inverse-on-surface": "#3f2b2f",
+                        "background": "#1f0e13",
+                        "on-surface-variant": "#e5bcc4",
+                        "primary-container": "#ff4b89"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "unit": "8px",
+                        "stack-gap": "12px",
+                        "gutter": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-xl": ["Anybody"],
+                        "label-bold": ["Hanken Grotesk"],
+                        "headline-md": ["Anybody"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-xl-mobile": ["Anybody"],
+                        "headline-lg": ["Anybody"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "headline-xl-mobile": ["36px", {"lineHeight": "1.1", "fontWeight": "900"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        .scanline {
+            animation: scan 2s linear infinite;
+        }
+
+        .toxic-glow {
+            box-shadow: 0 0 20px rgba(42, 229, 0, 0.4);
+        }
+
+        .reveal-active .hidden-content {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+        }
+        
+        .reveal-active .mask-content {
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        .chunky-shadow {
+            box-shadow: 0 4px 0 0 rgba(0, 0, 0, 1);
+        }
+        
+        .chunky-shadow-active {
+            box-shadow: 0 0px 0 0 rgba(0, 0, 0, 1);
+            transform: translateY(4px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-tertiary selection:text-on-tertiary min-h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface border-b-4 border-secondary shadow-[0_4px_0_0_rgba(157,5,255,1)] flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-105 transition-transform active:translate-y-1">menu</span>
+<h1 class="text-headline-md-mobile font-headline-md font-black tracking-tighter text-primary uppercase">WhoLied?</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-label-bold font-label-bold text-primary">Your Role</span>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-105 transition-transform active:translate-y-1">settings</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile flex flex-col items-center justify-center min-h-screen">
+<!-- Role Card Container -->
+<div class="relative w-full max-w-[400px] aspect-[3/4] group transition-all duration-500 ease-out" id="roleCard">
+<!-- Suspense Card Background -->
+<div class="absolute inset-0 bg-surface-container border-4 border-secondary rounded-xl shadow-[0_8px_0_0_rgba(157,5,255,1)] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent"></div>
+<!-- Inner Shadow Effect -->
+<div class="absolute inset-0 shadow-[inset_0_4px_12px_rgba(0,0,0,0.8)]"></div>
+</div>
+<!-- Content Area -->
+<div class="relative z-10 h-full w-full flex flex-col items-center justify-center p-gutter text-center">
+<!-- Reveal Mask (Visible Initially) -->
+<div class="mask-content transition-all duration-300 flex flex-col items-center gap-stack-gap" id="maskLayer">
+<div class="w-24 h-24 rounded-full bg-surface flex items-center justify-center border-4 border-outline mb-4">
+<span class="material-symbols-outlined text-[48px] text-outline-variant" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<p class="font-headline-md text-headline-md-mobile text-on-surface-variant uppercase tracking-widest">Confidential</p>
+<p class="font-body-md text-on-surface-variant/60 max-w-[200px]">Hold the button below to see your topic</p>
+</div>
+<!-- Hidden Topic (Revealed on Hold) -->
+<div class="hidden-content absolute inset-0 opacity-0 scale-95 transition-all duration-500 flex flex-col items-center justify-center p-gutter pointer-events-none" id="topicLayer">
+<div class="absolute top-0 left-0 w-full h-1 bg-tertiary scanline"></div>
+<span class="text-label-bold font-label-bold text-tertiary uppercase tracking-[0.2em] mb-4">THE TOPIC IS...</span>
+<div class="toxic-glow p-6 border-4 border-tertiary bg-on-tertiary-fixed-variant/20 rounded-xl mb-6">
+<h2 class="font-headline-xl-mobile text-headline-xl-mobile text-tertiary uppercase leading-none tracking-tighter">PINEAPPLE PIZZA</h2>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="flex items-center gap-2 text-error px-4 py-2 border-2 border-error rounded-full bg-error/10">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="text-label-bold font-label-bold uppercase">PRIVATE: Keep it secret!</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Chunky Hold Button -->
+<div class="mt-12 w-full max-w-[400px] flex justify-center">
+<button class="w-full h-20 bg-primary text-on-primary font-label-bold text-[18px] uppercase tracking-widest rounded-xl border-4 border-black chunky-shadow transition-all select-none active:scale-95 touch-none" id="holdButton" onmousedown="startReveal()" onmouseleave="endReveal()" onmouseup="endReveal()" ontouchend="endReveal()" ontouchstart="startReveal()">
+                HOLD TO REVEAL ROLE
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container border-t-4 border-outline shadow-[0_-4px_0_0_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center bg-tertiary text-on-tertiary rounded-xl px-4 py-1 translate-y-[-4px] shadow-[0_4px_0_0_rgba(9,83,0,1)] transition-transform scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Reveal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-colors p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Clue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-colors p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Discuss</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:bg-surface-variant transition-colors p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">how_to_vote</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Vote</span>
+</a>
+</nav>
+<!-- Visual Atmosphere: Noise Texture Overlay -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay">
+<img class="w-full h-full object-cover" data-alt="A fine black and white grainy noise texture used as a visual overlay to give a vintage, tactile, or cinematic feel to a digital interface. The texture is uniform and subtle, designed for high-stakes social gaming environments where atmosphere and mood are prioritized through maximalist and tactile aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAjy5LT_z9fN6cS9gKa2WvnMHf1tMMbuhm7-Ht4-e4y9m_KlUfvnoxg0OOzDUkTEIDp-PBPWKnrfnAD4c0Arss-MmXvfW9eQsEHXYKTLnLpS1MjEVYg3GkykY7M-IH1SenlttJh7i0tgk-KEoMlYXXxR1gIKcKnZhkGAINrKqpqugzRZU271sjTU1Gpyrz23os8LrFswPqeNdXJ-95Z6BvXkEazZqxe8jyQJrqcSEyFFevzjZ9gETp8ZTCfHkdaLrBwc6bp16UUGs"/>
+</div>
+<script>
+        let holdTimer;
+        const card = document.getElementById('roleCard');
+        const button = document.getElementById('holdButton');
+        const mask = document.getElementById('maskLayer');
+        const topic = document.getElementById('topicLayer');
+
+        function startReveal() {
+            // Visual feedback on button
+            button.classList.remove('chunky-shadow');
+            button.classList.add('chunky-shadow-active');
+            
+            // Start the reveal transition
+            card.classList.add('reveal-active');
+            card.classList.add('scale-105');
+            card.querySelector('.absolute.inset-0.bg-surface-container').classList.add('border-tertiary');
+            card.querySelector('.absolute.inset-0.bg-surface-container').classList.remove('border-secondary');
+            card.querySelector('.absolute.inset-0.bg-surface-container').classList.add('shadow-[0_8px_0_0_rgba(42,229,0,1)]');
+            card.querySelector('.absolute.inset-0.bg-surface-container').classList.remove('shadow-[0_8px_0_0_rgba(157,5,255,1)]');
+            
+            // Haptic simulation if available
+            if ("vibrate" in navigator) {
+                navigator.vibrate(50);
+            }
+        }
+
+        function endReveal() {
+            // Restore button
+            button.classList.add('chunky-shadow');
+            button.classList.remove('chunky-shadow-active');
+            
+            // Restore card
+            card.classList.remove('reveal-active');
+            card.classList.remove('scale-105');
+            card.querySelector('.absolute.inset-0.bg-surface-container').classList.remove('border-tertiary');
+            card.querySelector('.absolute.inset-0.bg-surface-container').classList.add('border-secondary');
+            card.querySelector('.absolute.inset-0.bg-surface-container').classList.remove('shadow-[0_8px_0_0_rgba(42,229,0,1)]');
+            card.querySelector('.absolute.inset-0.bg-surface-container').classList.add('shadow-[0_8px_0_0_rgba(157,5,255,1)]');
+        }
+
+        // Prevent context menu on long press
+        window.oncontextmenu = function(event) {
+            if (event.target === button) {
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        };
+    </script>
+</body></html>
