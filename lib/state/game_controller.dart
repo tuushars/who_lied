@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:context_holder/context_holder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'game_state.dart';
 import 'topics.dart';
@@ -154,9 +155,11 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     state = state.copyWith(selectedCategory: category);
   }
 
-  void startRound() {
+  Future<void> startRound() async{
     if (state.hostId != state.myPlayerId) return;
-    if (state.players.length < 2) return;
+    if (state.players.length < 2) {
+      return;
+    }
 
     _clueTimer?.cancel();
     _discussionTimer?.cancel();
@@ -180,6 +183,14 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       majorityVotedPlayerId: null,
       scoresByPlayerId: const {},
     );
+
+    final code = state.roomCode!;
+    final db = FirebaseDatabase.instance;
+    await db.ref('rooms/$code').update({
+      'status': 'reveal',
+      'topic': topic,
+      'imposterId': imposter.id,
+    });
   }
 
   void beginCluePhase() {
@@ -239,6 +250,22 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         return WhoLiedPlayer(id: e.key, name: p['name'] ?? '');
       }).toList();
       state = state.copyWith(players: updatedPlayers);
+    });
+
+    FirebaseDatabase.instance.ref('rooms/$code').onValue.listen((event) {
+      final data = Map<String, dynamic>.from(event.snapshot.value as Map? ?? {});
+      final status = data['status'];
+      final topic = data['topic'];
+      final imposterId = data['imposterId'];
+
+      if (status == 'reveal' && state.hostId != state.myPlayerId) {
+        state = state.copyWith(
+          phase: GamePhase.reveal,
+          topic: topic,
+          imposterPlayerId: imposterId,
+        );
+        ContextHolder.currentContext.go('/reveal');
+      }
     });
   }
 

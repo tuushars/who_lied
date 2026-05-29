@@ -1,3 +1,4 @@
+import 'package:context_holder/context_holder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,7 @@ import '../screens/voting/voting_screen.dart';
 final appRouterProvider = Provider<GoRouter>((ref) {
   // NOTE: Screens read/write state via Riverpod; the router itself is static.
   return GoRouter(
+    navigatorKey: ContextHolder.key,
     initialLocation: '/',
     routes: [
       GoRoute(

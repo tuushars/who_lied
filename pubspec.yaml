@@ -43,6 +43,7 @@ dependencies:
   firebase_core: ^4.9.0
   firebase_auth: ^6.5.1
   firebase_database: ^12.4.1
+  context_holder: ^0.0.5
 
 dev_dependencies:
   flutter_test:
