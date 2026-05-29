@@ -31,11 +31,16 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     return List.generate(6, (_) => chars[_rand.nextInt(chars.length)]).join();
   }
 
-  void resetToHome() {
+  Future<void> resetToHome() async{
     _clueTimer?.cancel();
     _discussionTimer?.cancel();
     _clueTimer = null;
     _discussionTimer = null;
+    final code = state.roomCode;
+    if (code != null) {
+      await FirebaseDatabase.instance.ref('rooms/$code').remove();
+    }
+
     state = WhoLiedGameState.initial();
   }
 
@@ -449,7 +454,7 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     });
   }
 
-  void playAgainToLobby() {
+  Future<void> playAgainToLobby() async{
     // Keep room + players, but clear round-specific data.
     _clueTimer?.cancel();
     _discussionTimer?.cancel();
@@ -469,6 +474,17 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       majorityVotedPlayerId: null,
       scoresByPlayerId: const {},
     );
+
+    final code = state.roomCode!;
+    await FirebaseDatabase.instance.ref('rooms/$code').update({
+      'status': 'lobby',
+      'topic': null,
+      'imposterId': null,
+      'scores': null,
+      'votes': null,
+      'clues': null,
+      'majorityVotedPlayerId': null,
+    });
   }
 }
 
