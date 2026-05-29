@@ -31,15 +31,23 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     return List.generate(6, (_) => chars[_rand.nextInt(chars.length)]).join();
   }
 
-  Future<void> resetToHome() async{
+  void resetToHome() async {
     _clueTimer?.cancel();
     _discussionTimer?.cancel();
     _clueTimer = null;
     _discussionTimer = null;
+
     final code = state.roomCode;
     final uid = FirebaseAuth.instance.currentUser!.uid;
+
     if (code != null) {
-      await FirebaseDatabase.instance.ref('rooms/$code/players/$uid').remove();
+      if (state.hostId == state.myPlayerId) {
+        // host deletes entire room 👇
+        await FirebaseDatabase.instance.ref('rooms/$code').remove();
+      } else {
+        // non-host just removes themselves
+        await FirebaseDatabase.instance.ref('rooms/$code/players/$uid').remove();
+      }
     }
 
     state = WhoLiedGameState.initial();
@@ -268,6 +276,11 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     });
 
     FirebaseDatabase.instance.ref('rooms/$code').onValue.listen((event) {
+      if (!event.snapshot.exists) {
+        state = WhoLiedGameState.initial();
+        ContextHolder.currentContext.go('/');
+        return;
+      }
       final data = Map<String, dynamic>.from(event.snapshot.value as Map? ?? {});
       final status = data['status'];
       final topic = data['topic'];
