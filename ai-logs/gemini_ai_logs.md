@@ -43,8 +43,9 @@ I have created the `lib/state/topics.dart` file with the initial topic packs as 
 **Action:** Updated `WhoLiedGameState` and `WhoLiedGameController` to support topic categories and dynamic topic selection.
 **Action:** Removed "Add Bot" feature from the game controller and all UI screens (Lobby, Clues, Voting, Scoreboard).
 **Action:** Simplified `WhoLiedPlayer` by removing the `isBot` property.
+**Action:** Replaced the manual "Continue" button in `RevealScreen` with an automatic 5-second timer for navigation to the Clues phase.
 **Next Steps:**
-- Implement Firebase synchronization (Firestore/RTDB).
+- Implement Firebase synchronization for game phases (beyond just the initial reveal).
 - Add anonymous Firebase Auth.
 
 ---

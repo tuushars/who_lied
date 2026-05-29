@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,13 +8,52 @@ import '../../state/game_controller.dart';
 import '../../ui/stitch_scaffold.dart';
 import '../../ui/stitch_theme.dart';
 
-class RevealScreen extends ConsumerWidget {
+class RevealScreen extends ConsumerStatefulWidget {
   const RevealScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RevealScreen> createState() => _RevealScreenState();
+}
+
+class _RevealScreenState extends ConsumerState<RevealScreen> {
+  int _secondsRemaining = 5;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_secondsRemaining > 0) {
+        setState(() {
+          _secondsRemaining--;
+        });
+      } else {
+        _timer?.cancel();
+        _navigateToClues();
+      }
+    });
+  }
+
+  void _navigateToClues() {
+    if (mounted) {
+      ref.read(gameControllerProvider.notifier).beginCluePhase();
+      context.go('/clues');
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final game = ref.watch(gameControllerProvider);
-    final controller = ref.read(gameControllerProvider.notifier);
 
     final imposterId = game.imposterPlayerId;
     final myId = game.myPlayerId;
@@ -84,20 +125,16 @@ class RevealScreen extends ConsumerWidget {
                       : 'Your job: submit a real clue connected to the topic.',
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
-                ChunkyButton(
-                  onPressed: topic == null
-                      ? null
-                      : () {
-                          controller.beginCluePhase();
-                          context.go('/clues');
-                        },
-                  label: 'CONTINUE TO CLUES',
-                  background: StitchColors.primary,
-                  foreground: StitchColors.onPrimary,
-                  shadow: const Color(0xFF66002C),
+                const SizedBox(height: 32),
+                Text(
+                  'Moving to Clues in $_secondsRemaining...',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: StitchColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 24),
                 if (game.hostId != myId)
                   const Text(
                     'Tip: Everyone follows the same phase timers (local scaffold).',

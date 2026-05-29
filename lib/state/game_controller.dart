@@ -193,7 +193,7 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     });
   }
 
-  void beginCluePhase() {
+  Future<void> beginCluePhase() async{
     if (state.phase != GamePhase.reveal && state.phase != GamePhase.lobby) return;
 
     _clueTimer?.cancel();
@@ -219,9 +219,15 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         state = state.copyWith(clueSecondsRemaining: remaining - 1);
       }
     });
+
+    final code = state.roomCode!;
+    final db = FirebaseDatabase.instance;
+    await db.ref('rooms/$code').update({
+      'status': 'clues',
+    });
   }
 
-  void submitMyClue(String clue) {
+  Future<void> submitMyClue(String clue) async{
     if (state.phase != GamePhase.clues) return;
     if (state.cluePhaseLocked) return;
     final meId = state.myPlayerId;
@@ -236,13 +242,14 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         meId: trimmed,
       },
     );
+
+    final code = state.roomCode!;
+    await FirebaseDatabase.instance
+        .ref('rooms/$code/clues/$meId')
+        .set(trimmed);
   }
 
   void listenToRoom(String code) {
-    FirebaseDatabase.instance.ref('rooms/$code').onValue.listen((event) {
-      final data = Map<String, dynamic>.from(event.snapshot.value as Map? ?? {});
-      state = state.copyWith(hostId: data["hostId"].toString());
-    });
     FirebaseDatabase.instance.ref('rooms/$code/players').onValue.listen((event) {
       final data = Map<String, dynamic>.from(event.snapshot.value as Map? ?? {});
       final updatedPlayers = data.entries.map((e) {
@@ -258,7 +265,22 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       final topic = data['topic'];
       final imposterId = data['imposterId'];
 
-      if (status == 'reveal' && state.hostId != state.myPlayerId) {
+      // sync hostId
+      state = state.copyWith(hostId: data['hostId'].toString());
+
+      // sync clues always
+      final cluesRaw = data['clues'];
+      if (cluesRaw != null) {
+        final clues = Map<String, String>.from(
+            (cluesRaw as Map).map((k, v) => MapEntry(k.toString(), v.toString()))
+        );
+        state = state.copyWith(cluesByPlayerId: clues);
+      }
+
+      final isHost = state.hostId == state.myPlayerId;
+
+      // only navigate if phase actually changed 👇
+      if (status == 'reveal' && state.phase != GamePhase.reveal && !isHost) {
         state = state.copyWith(
           phase: GamePhase.reveal,
           topic: topic,
@@ -266,10 +288,16 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         );
         ContextHolder.currentContext.go('/reveal');
       }
+
+      if (status == 'discussion' && state.phase != GamePhase.discussion && !isHost) {
+        state = state.copyWith(phase: GamePhase.discussion);
+        beginDiscussionPhase();
+        ContextHolder.currentContext.go('/discussion');
+      }
     });
   }
 
-  void beginDiscussionPhase() {
+  Future<void> beginDiscussionPhase() async{
     if (state.phase != GamePhase.clues) return;
 
     _clueTimer?.cancel();
@@ -294,6 +322,11 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         state = state.copyWith(discussionSecondsRemaining: remaining - 1);
       }
     });
+
+    final code = state.roomCode!;
+    await FirebaseDatabase.instance
+        .ref('rooms/$code')
+        .update({'status': 'discussion'});
   }
 
   void beginVotingPhase() {
