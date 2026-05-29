@@ -79,7 +79,7 @@ class VotingScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             if (game.hostId == game.myPlayerId) ChunkyButton(
-              onPressed: game.votesByVoterId.isEmpty
+              onPressed: game.votesByVoterId.length < game.players.length
                   ? null
                   : () {
                       controller.revealAndScore();
