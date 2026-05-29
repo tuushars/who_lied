@@ -290,14 +290,20 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       }
 
       if (status == 'discussion' && state.phase != GamePhase.discussion && !isHost) {
+        beginDiscussionPhase(callFirebaseService: false);
         state = state.copyWith(phase: GamePhase.discussion);
         beginDiscussionPhase();
         ContextHolder.currentContext.go('/discussion');
       }
+
+      if (status == 'voting' && state.phase != GamePhase.voting && !isHost) {
+        state = state.copyWith(phase: GamePhase.voting);
+        ContextHolder.currentContext.go('/voting');
+      }
     });
   }
 
-  Future<void> beginDiscussionPhase() async{
+  Future<void> beginDiscussionPhase({bool callFirebaseService = true}) async{
     if (state.phase != GamePhase.clues) return;
 
     _clueTimer?.cancel();
@@ -323,13 +329,15 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       }
     });
 
-    final code = state.roomCode!;
-    await FirebaseDatabase.instance
-        .ref('rooms/$code')
-        .update({'status': 'discussion'});
+    if (callFirebaseService) {
+      final code = state.roomCode!;
+      await FirebaseDatabase.instance
+          .ref('rooms/$code')
+          .update({'status': 'discussion'});
+    }
   }
 
-  void beginVotingPhase() {
+  Future<void> beginVotingPhase() async{
     if (state.phase != GamePhase.discussion) return;
 
     _discussionTimer?.cancel();
@@ -341,6 +349,11 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       majorityVotedPlayerId: null,
       scoresByPlayerId: const {},
     );
+
+    final code = state.roomCode!;
+    await FirebaseDatabase.instance
+        .ref('rooms/$code')
+        .update({'status': 'voting'});
   }
 
   void submitMyVote(String votedPlayerId) {

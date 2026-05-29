@@ -55,7 +55,7 @@ class DiscussionScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 12),
-            ChunkyButton(
+            if (game.hostId == game.myPlayerId) ChunkyButton(
               onPressed: game.discussionPhaseLocked
                   ? () {
                       controller.beginVotingPhase();

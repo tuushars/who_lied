@@ -78,7 +78,7 @@ class VotingScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 12),
-            ChunkyButton(
+            if (game.hostId == game.myPlayerId) ChunkyButton(
               onPressed: game.votesByVoterId.isEmpty
                   ? null
                   : () {
