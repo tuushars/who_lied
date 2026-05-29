@@ -1,3 +1,5 @@
+import '../utils/app_constants.dart';
+
 enum GamePhase {
   home,
   lobby,
@@ -49,7 +51,7 @@ class WhoLiedGameState {
     required this.hostId,
     required this.myPlayerId,
     required this.players,
-    this.selectedCategory = 'General',
+    this.selectedCategory = AppConstants.defaultCategory,
     required this.topic,
     required this.imposterPlayerId,
     required this.cluesByPlayerId,
@@ -69,7 +71,7 @@ class WhoLiedGameState {
       hostId: "",
       myPlayerId: null,
       players: const [],
-      selectedCategory: 'General',
+      selectedCategory: AppConstants.defaultCategory,
       topic: null,
       imposterPlayerId: null,
       cluesByPlayerId: const {},

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../state/game_controller.dart';
 import '../../ui/stitch_scaffold.dart';
 import '../../ui/stitch_theme.dart';
+import '../../utils/app_constants.dart';
 
 class LobbyScreen extends ConsumerWidget {
   const LobbyScreen({super.key});
@@ -69,7 +70,7 @@ class LobbyScreen extends ConsumerWidget {
               ),
             ),
             Text(
-              '${game.players.length}/8 JOINED',
+              '${game.players.length}/${AppConstants.maxPlayers} JOINED',
               style: const TextStyle(
                 color: StitchColors.tertiary,
                 fontWeight: FontWeight.bold,
@@ -120,7 +121,8 @@ class LobbyScreen extends ConsumerWidget {
               ),
             const SizedBox(height: 12),
             ChunkyButton(
-              onPressed: (game.hostId != myId || game.players.length < 2)
+              onPressed: (game.hostId != myId ||
+                      game.players.length < AppConstants.minPlayersToStart)
                   ? null
                   : () {
                       controller.startRound();

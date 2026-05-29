@@ -44,6 +44,8 @@ I have created the `lib/state/topics.dart` file with the initial topic packs as 
 **Action:** Removed "Add Bot" feature from the game controller and all UI screens (Lobby, Clues, Voting, Scoreboard).
 **Action:** Simplified `WhoLiedPlayer` by removing the `isBot` property.
 **Action:** Replaced the manual "Continue" button in `RevealScreen` with an automatic 5-second timer for navigation to the Clues phase.
+**Action:** Created `lib/utils/app_constants.dart` and centralized hardcoded values (Firebase URL, timers, player limits, room code length).
+**Action:** Refactored `main.dart`, `game_controller.dart`, `reveal_screen.dart`, `lobby_screen.dart`, and `game_state.dart` to use `AppConstants`.
 **Next Steps:**
 - Implement Firebase synchronization for game phases (beyond just the initial reveal).
 - Add anonymous Firebase Auth.

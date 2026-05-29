@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../utils/app_constants.dart';
 import 'game_state.dart';
 import 'topics.dart';
 
@@ -28,7 +29,10 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
 
   String createRandomRoomCode() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // avoid confusing chars
-    return List.generate(6, (_) => chars[_rand.nextInt(chars.length)]).join();
+    return List.generate(
+      AppConstants.roomCodeLength,
+      (_) => chars[_rand.nextInt(chars.length)],
+    ).join();
   }
 
   void resetToHome() async {
@@ -221,7 +225,7 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       phase: GamePhase.clues,
       cluesByPlayerId: const {},
       votesByVoterId: state.votesByVoterId, // keep empty until voting phase
-      clueSecondsRemaining: 60,
+      clueSecondsRemaining: AppConstants.cluePhaseDuration,
       cluePhaseLocked: false,
     );
 
@@ -355,7 +359,7 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
 
     state = state.copyWith(
       phase: GamePhase.discussion,
-      discussionSecondsRemaining: 90,
+      discussionSecondsRemaining: AppConstants.discussionPhaseDuration,
       discussionPhaseLocked: false,
     );
 

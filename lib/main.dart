@@ -7,12 +7,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'router/app_router.dart';
 import 'ui/stitch_theme.dart';
+import 'utils/app_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAuth.instance.signInAnonymously();
-  FirebaseDatabase.instance.databaseURL = 'https://tuushars-who-lied-default-rtdb.asia-southeast1.firebasedatabase.app/';
+  FirebaseDatabase.instance.databaseURL = AppConstants.firebaseDatabaseUrl;
   runApp(const ProviderScope(child: MyApp()));
 }
 

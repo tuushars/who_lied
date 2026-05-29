@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../state/game_controller.dart';
 import '../../ui/stitch_scaffold.dart';
 import '../../ui/stitch_theme.dart';
+import '../../utils/app_constants.dart';
 
 class RevealScreen extends ConsumerStatefulWidget {
   const RevealScreen({super.key});
@@ -16,7 +17,7 @@ class RevealScreen extends ConsumerStatefulWidget {
 }
 
 class _RevealScreenState extends ConsumerState<RevealScreen> {
-  int _secondsRemaining = 5;
+  int _secondsRemaining = AppConstants.revealPhaseDuration;
   Timer? _timer;
 
   @override
