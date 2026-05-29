@@ -300,6 +300,29 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         state = state.copyWith(phase: GamePhase.voting);
         ContextHolder.currentContext.go('/voting');
       }
+
+      final votesRaw = data['votes'];
+      if (votesRaw != null) {
+        final votes = Map<String, String>.from(
+            (votesRaw as Map).map((k, v) => MapEntry(k.toString(), v.toString()))
+        );
+        state = state.copyWith(votesByVoterId: votes);
+      }
+
+      if (status == 'scoreboard' && state.phase != GamePhase.scoreboard && !isHost) {
+        final scoresRaw = data['scores'];
+        final scores = scoresRaw != null
+            ? Map<String, int>.from(
+            (scoresRaw as Map).map((k, v) => MapEntry(k.toString(), (v as num).toInt()))
+        )
+            : <String, int>{};
+        state = state.copyWith(
+          phase: GamePhase.scoreboard,
+          majorityVotedPlayerId: data['majorityVotedPlayerId'],
+          scoresByPlayerId: scores,
+        );
+        ContextHolder.currentContext.go('/scoreboard');
+      }
     });
   }
 
@@ -356,7 +379,7 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         .update({'status': 'voting'});
   }
 
-  void submitMyVote(String votedPlayerId) {
+  Future<void> submitMyVote(String votedPlayerId) async{
     if (state.phase != GamePhase.voting) return;
     final meId = state.myPlayerId;
     if (meId == null) return;
@@ -370,9 +393,14 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         meId: votedPlayerId,
       },
     );
+
+    final code = state.roomCode!;
+    await FirebaseDatabase.instance
+        .ref('rooms/$code/votes/$meId')
+        .set(votedPlayerId);
   }
 
-  void revealAndScore() {
+  Future<void> revealAndScore() async{
     if (state.phase != GamePhase.voting) return;
 
     final votes = state.votesByVoterId.values.toList();
@@ -412,6 +440,13 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       majorityVotedPlayerId: majorityVotedPlayerId,
       scoresByPlayerId: scores,
     );
+
+    final code = state.roomCode!;
+    await FirebaseDatabase.instance.ref('rooms/$code').update({
+      'status': 'scoreboard',
+      'majorityVotedPlayerId': majorityVotedPlayerId,
+      'scores': scores,
+    });
   }
 
   void playAgainToLobby() {

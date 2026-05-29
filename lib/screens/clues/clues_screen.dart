@@ -103,7 +103,7 @@ class _CluesScreenState extends ConsumerState<CluesScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            ChunkyButton(
+            if (game.hostId == game.myPlayerId) ChunkyButton(
               onPressed: game.cluePhaseLocked
                   ? () {
                       controller.beginDiscussionPhase();
