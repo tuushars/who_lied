@@ -37,8 +37,9 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     _clueTimer = null;
     _discussionTimer = null;
     final code = state.roomCode;
+    final uid = FirebaseAuth.instance.currentUser!.uid;
     if (code != null) {
-      await FirebaseDatabase.instance.ref('rooms/$code').remove();
+      await FirebaseDatabase.instance.ref('rooms/$code/players/$uid').remove();
     }
 
     state = WhoLiedGameState.initial();
@@ -99,6 +100,8 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
         'name': myName.trim().isEmpty ? 'Host' : myName,
         'score': 0,
       });
+
+      await db.ref('rooms/$code/players/$uid').onDisconnect().remove();
       print("Hello from createRoom 9");
 
       listenToRoom(code);
@@ -454,12 +457,40 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
     });
   }
 
-  Future<void> playAgainToLobby() async{
-    // Keep room + players, but clear round-specific data.
+  void playAgainToLobby() async {
     _clueTimer?.cancel();
     _discussionTimer?.cancel();
     _clueTimer = null;
     _discussionTimer = null;
+
+    final code = state.roomCode!;
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final myName = state.players
+        .firstWhere((p) => p.id == state.myPlayerId,
+        orElse: () => WhoLiedPlayer(id: uid, name: 'Player'))
+        .name;
+
+    // ADD THIS CHECK 👇
+    if (state.hostId == state.myPlayerId) {
+      // only host wipes all players
+      await FirebaseDatabase.instance.ref('rooms/$code/players').remove();
+      await FirebaseDatabase.instance.ref('rooms/$code').update({
+        'status': 'lobby',
+        'topic': null,
+        'imposterId': null,
+        'scores': null,
+        'votes': null,
+        'clues': null,
+        'majorityVotedPlayerId': null,
+      });
+    }
+
+    // everyone re-adds only themselves
+    await FirebaseDatabase.instance.ref('rooms/$code/players/$uid').set({
+      'name': myName,
+      'score': 0,
+    });
+    await FirebaseDatabase.instance.ref('rooms/$code/players/$uid').onDisconnect().remove();
 
     state = state.copyWith(
       phase: GamePhase.lobby,
@@ -474,17 +505,6 @@ class WhoLiedGameController extends StateNotifier<WhoLiedGameState> {
       majorityVotedPlayerId: null,
       scoresByPlayerId: const {},
     );
-
-    final code = state.roomCode!;
-    await FirebaseDatabase.instance.ref('rooms/$code').update({
-      'status': 'lobby',
-      'topic': null,
-      'imposterId': null,
-      'scores': null,
-      'votes': null,
-      'clues': null,
-      'majorityVotedPlayerId': null,
-    });
   }
 }
 
